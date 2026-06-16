@@ -1,6 +1,7 @@
 package com.zosh.ai.services;
 
 import com.zosh.exception.ProductException;
+import org.springframework.beans.factory.annotation.Value;
 import com.zosh.mapper.OrderMapper;
 import com.zosh.mapper.ProductMapper;
 import com.zosh.model.Cart;
@@ -31,7 +32,8 @@ import java.util.Map;
 public class AiChatBotServiceImpl implements AiChatBotService {
 
 
-    String GEMINI_API_KEY = "AIzaSyDp-jeRRqqbr08scpIn1p9rLEL_Nqv5Zuo";
+    @Value("${gemini.api.key}")
+    private String GEMINI_API_KEY;
 
     private final CartRepository cartRepository;
 
