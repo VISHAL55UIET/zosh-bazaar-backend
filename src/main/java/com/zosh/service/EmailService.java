@@ -1,36 +1,65 @@
 package com.zosh.service;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
-import org.springframework.mail.MailSendException;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.*;
 
 @Service
 public class EmailService {
 
-    @Autowired
-    private JavaMailSender javaMailSender;
+    @Value("${brevo.api.key}")
+    private String brevoApiKey;
 
+    public void sendVerificationOtpEmail(
+            String userEmail,
+            String otp,
+            String subject,
+            String text) {
 
-    public void sendVerificationOtpEmail(String userEmail, String otp, String subject, String text) throws MessagingException, MailSendException {
+        RestTemplate restTemplate = new RestTemplate();
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("api-key", brevoApiKey);
 
-        try {
-            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+        Map<String, Object> requestBody = new HashMap<>();
 
+        Map<String, String> sender = new HashMap<>();
+        sender.put("name", "Zosh Bazaar");
+        sender.put("email", "vvvishalyou99@gmail.com");
 
-            helper.setSubject(subject);
-            helper.setText(text+otp, true);
-            helper.setTo(userEmail);
-            javaMailSender.send(mimeMessage);
-        } catch (MailException e) {
-            e.printStackTrace();
-            throw new MailSendException("Failed to send email");
-        }
+        List<Map<String, String>> to = new ArrayList<>();
+
+        Map<String, String> recipient = new HashMap<>();
+        recipient.put("email", userEmail);
+
+        to.add(recipient);
+
+        requestBody.put("sender", sender);
+        requestBody.put("to", to);
+        requestBody.put("subject", subject);
+
+        requestBody.put(
+                "htmlContent",
+                "<h2>Zosh Bazaar OTP Verification</h2>"
+                        + "<p>Your OTP is : <b>"
+                        + otp
+                        + "</b></p>"
+        );
+
+        HttpEntity<Map<String, Object>> entity =
+                new HttpEntity<>(requestBody, headers);
+
+        ResponseEntity<String> response =
+                restTemplate.postForEntity(
+                        "https://api.brevo.com/v3/smtp/email",
+                        entity,
+                        String.class
+                );
+
+        System.out.println("BREVO RESPONSE : " + response.getBody());
     }
 }
