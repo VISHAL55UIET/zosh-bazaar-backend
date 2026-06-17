@@ -27,21 +27,15 @@ public class AppConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(Authorize -> Authorize
-//                		.requestMatchers("/api/admin/**").hasAnyRole("SHOP_OWNER","ADMIN")
-                                .requestMatchers(
-                                        "/auth/**"
-                                ).permitAll()
+                .authorizeHttpRequests(authorize -> authorize
 
-                                .requestMatchers(
-                                        "/api/products/*/reviews"
-                                ).permitAll()
+                        .requestMatchers("/auth/**").permitAll()
 
-                                .requestMatchers(
-                                        "/api/**"
-                                ).authenticated()
-                                .requestMatchers("/api/products/*/reviews").permitAll()
-                                .anyRequest().permitAll()
+                        .requestMatchers("/api/products/*/reviews").permitAll()
+
+                        .requestMatchers("/api/**").authenticated()
+
+                        .anyRequest().permitAll()
                 )
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
