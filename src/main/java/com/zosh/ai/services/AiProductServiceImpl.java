@@ -21,7 +21,7 @@ import java.util.Map;
 public class AiProductServiceImpl implements AiProductService {
 
     @Value("${gemini.api.key}")
-    private static String API_KEY;
+    private  String API_KEY;
 
 
     @Override

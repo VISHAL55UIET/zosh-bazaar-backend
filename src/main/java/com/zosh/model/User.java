@@ -10,12 +10,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
 @Entity
 @Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+
+
+
+
 
     @Column(nullable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -43,3 +49,5 @@ public class User {
     private Set<Coupon> usedCoupons=new HashSet<>();
 
 }
+
+

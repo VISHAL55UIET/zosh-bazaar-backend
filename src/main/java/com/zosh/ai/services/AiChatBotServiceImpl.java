@@ -33,7 +33,7 @@ public class AiChatBotServiceImpl implements AiChatBotService {
 
 
     @Value("${gemini.api.key}")
-    private String GEMINI_API_KEY;
+    public String GEMINI_API_KEY;
 
     private final CartRepository cartRepository;
 
