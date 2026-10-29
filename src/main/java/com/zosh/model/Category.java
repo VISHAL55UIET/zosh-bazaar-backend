@@ -10,11 +10,10 @@ import lombok.Data;
 @Table(name = "categories")
 @Data
 public class Category {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String name;
 

@@ -13,10 +13,10 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Address {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
 
 	private String name;
