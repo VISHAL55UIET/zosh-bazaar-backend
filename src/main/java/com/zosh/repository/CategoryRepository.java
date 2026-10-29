@@ -8,8 +8,12 @@ import com.zosh.model.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    Category findByCategoryId(String categoryId);
+    List<Category> findAllByCategoryId(String categoryId);
 
-    List<Category>findByLevel(Integer level);
+    default Category findByCategoryId(String categoryId) {
+        List<Category> list = findAllByCategoryId(categoryId);
+        return list.isEmpty() ? null : list.get(0);
+    }
 
+    List<Category> findByLevel(Integer level);
 }
